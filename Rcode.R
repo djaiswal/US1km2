@@ -96,8 +96,8 @@ endyear=2010
 harvestduration=7
 
 N<- dim(Soildata)[1]
-istart<-(start)*10000+1
-iend <-(start+1)*10000
+istart<-(start)*1000000+1
+iend <-(start+1)*1000000
 iend <- ifelse(iend>N,N,iend)
 currentyear<-startyear
 output<- NULL
