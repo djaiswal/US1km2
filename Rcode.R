@@ -114,11 +114,11 @@ for ( i in istart:iend){
         if(currentyear>endyear){
             break}
       dat<- NULL
-      lat <-Soildata$y[i]
-      lon <- Soildata$x[i]
-      soilDepth <- Soildata$layer.1[i]
-      SoilType <-  Soildata$layer.2[i]
-     if((Soildata$layer.1[i]!=-9)&&(Soildata$layer.2[i]!=-9)){
+      lat <-Soildata_subset$y[i]
+      lon <- Soildata_subset$x[i]
+      soilDepth <- Soildata_subset$layer.1[i]
+      SoilType <-  Soildata_subset$layer.2[i]
+     if((Soildata_subset$layer.1[i]!=-9)&&(Soildata_subset$layer.2[i]!=-9)){
          dat <- getNARRforBioCro(lat,lon,currentyear)
           soilP <- soilParms(wsFun="logistic",phi1=0.0177,phi2=0.83,rfl=0.4,soilLayers=1,soilDepth=soilDepth,soilType=SoilType)
       res1<- caneGro(dat,lat=lat, soilControl=soilP,photoControl=list(Catm=Co2level),day1 = day1, dayn = dayn,iRhizome=iRhizome,irtl=1e-2)
