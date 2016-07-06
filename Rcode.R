@@ -87,6 +87,9 @@ layer0to5[is.na(layer0to5)]<- -9
 Soildata <- stack(depth_bedrock,layer0to5)
 Soildata <- as.data.frame(rasterToPoints(Soildata))
 
+Soildata$rowID <- row.names(Soildata)
+Soildata_subset <- subset(Soildata,!(Soildata$layer.1==-9 | Soildata$layer.2==-9))
+
 iRhizome <- 6
 Co2level=380
 day1=15 #15 January
@@ -95,17 +98,17 @@ startyear=1979
 endyear=2010
 harvestduration=7
 
-N<- dim(Soildata)[1]
-istart<-(start)*1000000+1
-iend <-(start+1)*1000000
+N<- dim(Soildata_subset)[1]
+istart<-(start)*10000+1
+iend <-(start+1)*10000
 iend <- ifelse(iend>N,N,iend)
-currentyear<-startyear
-output<- NULL
 finaloutput <- NULL
 ii=1 #Fake index to store gridoutput
 jj=1#Fake index to store gridoutput
 Tmin=1#Fake to avoid error when soil = -9
 for ( i in istart:iend){
+    currentyear <- startyear
+    output <- NULL
     repeat{
         currentyear<-currentyear+1
         if(currentyear>endyear){
@@ -122,16 +125,16 @@ for ( i in istart:iend){
           stem1<-res1$Stem[length(res1$Stem)]
           leaf1<-res1$Leaf[length(res1$Leaf)]
           root1 <-res1$Root[length(res1$Root)]
-          rhiz1 <- res1$Rhizome[length(res1$Rhizome)]
+          Seedcane1 <- res1$Seedcane[length(res1$Seedcane)]
           leaflitter1<- res1$LeafLittervec[length(res1$LeafLittervec)]
      }else{
          stem1 <- -9
          leaf1<- -9
-         root1 <- -9
+         Seedcane1 <- -9
          rhiz1 <- -9
          leaflitter1 <- -9
      }
-     tmpoutput<-as.vector(c(currentyear,stem1, leaf1,root1,rhiz1,leaflitter1))
+     tmpoutput<-as.vector(c(currentyear,stem1, leaf1,root1,Seedcane1,leaflitter1))
      output<-as.vector(c(output,tmpoutput))
       output<-as.vector(c(output,stem1*0.89)) # we still need to save output because sugarcane is harvested every year
     } #end repeat
