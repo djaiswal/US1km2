@@ -106,6 +106,7 @@ finaloutput <- NULL
 ii=1 #Fake index to store gridoutput
 jj=1#Fake index to store gridoutput
 Tmin=1#Fake to avoid error when soil = -9
+timestart <- Sys.time()
 for ( i in istart:iend){
     currentyear <- startyear
     output <- NULL
@@ -141,34 +142,12 @@ for ( i in istart:iend){
     gridoutput<-as.vector(c(c(ii,jj,lat,lon,Tmin),output))
     finaloutput <- rbind(finaloutput,gridoutput)
 } # end main for loop
+   save(finaloutput,file=paste("/home/a-m/djaiswal/Scripts/BioCroSimulations/USA/Marshalheap/SoilLayers/US1km2/Results/",formatC(istart,width=8,flag=0,format="d"),formatC(iend,width=8,flag=0,format="d"),".RData",sep=""))
 
-save(finaloutput,file=paste("/home/a-m/djaiswal/Scripts/BioCroSimulations/USA/Marshalheap/SoilLayers/US1km2/Results/",formatC(istart,width=8,flag=0,format="d"),formatC(iend,width=8,flag=0,format="d"),".RData",sep=""))
-
-
-
-'
-source("/home/a-m/djaiswal/Scripts/ClimateProcessing/NARR/getNARRforBioCro.R")
-N<- dim(Soildata)[1]
-Soildata$NarrIndex<- NA
-Soildata$NarrI<- NA
-Soildata$NarrJ<- NA
-USlayer<-read.table("/home/groups/ebimodeling/met/NARR/ProcessedNARR/NARRindex.txt")
-for ( i in 1:N){
-    if(Soildata$layer.1[i]!=-9){
-        lat<-Soildata$y[i]
-        lon <- Soildata$x[i]
-        index=which.min((lat-USlayer$Latt)^2+(lon-USlayer$Lonn)^2)
-        Soildata$NarrIndex[i]=index
-        Soildata$NarrI[i]=USlayer$Iindex[index]
-        Soildata$NarrJ[i]=USlayer$Jindex[index]
-    }else{
-         Soildata$NarrIndex[i]= -9
-         Soildata$NarrI[i]=-9
-         Soildata$NarrJ[i]=-9
-     }
-}
-'
-
+timeend <- Sys.time()
+timestart
+timeend
+object.size(finaloutput)
         
 
         
